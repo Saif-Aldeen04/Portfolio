@@ -16,7 +16,7 @@
             },
             "contributionsCollection": {
                 "contributionCalendar": {
-                    "totalContributions": 316,
+                    "totalContributions": 318,
                     "weeks": [
                         {
                             "contributionDays": [
@@ -2080,7 +2080,7 @@
                                 },
                                 {
                                     "date": "2026-08-29",
-                                    "contributionCount": 3,
+                                    "contributionCount": 5,
                                     "contributionLevel": "FIRST_QUARTILE"
                                 }
                             ]
@@ -2125,7 +2125,7 @@
                         "languages": {
                             "edges": [
                                 {
-                                    "size": 30672,
+                                    "size": 31554,
                                     "node": {
                                         "name": "Java",
                                         "color": "#b07219"
@@ -2361,32 +2361,32 @@
             "languageBreakdown": [
                 {
                     "name": "Python",
-                    "percentage": 38.63,
+                    "percentage": 38.53,
                     "color": "#3572A5"
                 },
                 {
                     "name": "HTML",
-                    "percentage": 29.46,
+                    "percentage": 29.38,
                     "color": "#e34c26"
                 },
                 {
-                    "name": "CSS",
-                    "percentage": 9.45,
-                    "color": "#663399"
-                },
-                {
                     "name": "Java",
-                    "percentage": 9.31,
+                    "percentage": 9.55,
                     "color": "#b07219"
                 },
                 {
+                    "name": "CSS",
+                    "percentage": 9.43,
+                    "color": "#663399"
+                },
+                {
                     "name": "JavaScript",
-                    "percentage": 7.39,
+                    "percentage": 7.37,
                     "color": "#f1e05a"
                 },
                 {
                     "name": "Shell",
-                    "percentage": 5.6,
+                    "percentage": 5.59,
                     "color": "#89e051"
                 },
                 {
