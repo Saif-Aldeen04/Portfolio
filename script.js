@@ -82,11 +82,11 @@ if(diffSection) diffIO.observe(diffSection);
 const termBody = document.getElementById('termBody');
 const termScript = [
   {type:'cmd', text:'whoami'},
-  {type:'out', text:'charan'},
+  {type:'out', text:'blackess'},
   {type:'cmd', text:'skills'},
-  {type:'out', text:'Python\nLinux\nDocker\nNetworking\nGitHub Actions'},
+  {type:'out', text:'Python Scripting\nLinux\nNetworking\nActive Directory\nWeb Security'},
   {type:'cmd', text:'status'},
-  {type:'out', text:'Building secure software...'},
+  {type:'out', text:'Securing Organizations...'},
 ];
 async function typeLine(text, className){
   const line = document.createElement('div');
@@ -104,7 +104,7 @@ async function runTerminal(){
       const line = document.createElement('div');
       line.className='term-line';
       termBody.appendChild(line);
-      let prompt = '<span class="term-prompt">charan@secbox</span><span style="color:var(--text-dim);">:~$ </span>';
+      let prompt = '<span class="term-prompt">blackess@secbox</span><span style="color:var(--text-dim);">:~$ </span>';
       line.innerHTML = prompt;
       let content='';
       for(let i=0;i<step.text.length;i++){
@@ -128,64 +128,7 @@ async function runTerminal(){
 }
 runTerminal();
 
-/* ---------- Dificulty --------- */
 
-fetch("data/LeetcodeResponse.json")
-  .then(response => response.json())
-  .then(data => {
-
-    const rank = data.data.matchedUser.profile.ranking;
-
-    const totalAc = data.data.matchedUser.submitStats.acSubmissionNum[0].count;
-    const easyAc = data.data.matchedUser.submitStats.acSubmissionNum[1].count;
-    const mediumAc = data.data.matchedUser.submitStats.acSubmissionNum[2].count;
-    const hardAc = data.data.matchedUser.submitStats.acSubmissionNum[3].count;
-
-    const acceptedSubmissions = data.data.matchedUser.submitStats.acSubmissionNum[0].submissions;
-    const totalSubmissions = data.data.matchedUser.submitStats.totalSubmissionNum[0].submissions;
-
-    const avatarLeetcode = data.data.matchedUser.profile.userAvatar;
-    const usernameLeetcode = data.data.matchedUserusername;
-    const streak = data.data.matchedUser.userCalendar.streak;
-    const Accp = ((acceptedSubmissions / totalSubmissions) * 100).toFixed(1);
-
-    
-    document.getElementById("rank").textContent = rank.toLocaleString('en-US')
-    document.getElementById("achievement-leetcode").textContent = totalAc;
-    
-    const solvedEl = document.getElementById("solvedCount");
-    solvedEl.dataset.target = totalAc;
-
-    const streakEl = document.getElementById("streakCount");
-    streakEl.dataset.target = streak;
-
-    const totalPe = document.getElementById("acceptanceCount");
-    totalPe.dataset.target = Accp;
-
-    document.getElementById("leetcode-avatar").src = avatarLeetcode;
-    document.getElementById("leetcode-username").textContent = usernameLeetcode;
-
-    document.getElementById("profileStreak").textContent = streak + " days";
-    document.getElementById("profileAcceptance").textContent = Accp + " %";
-
-    renderLeetCodeBadges(data);
-
-    document.getElementById("easyCount").textContent = easyAc;
-    document.getElementById("mediumCount").textContent = mediumAc;
-    document.getElementById("hardCount").textContent = hardAc;
-
-    document.getElementById("easyBar").style.width =
-        (easyAc / totalAc * 100) + "%";
-
-    document.getElementById("mediumBar").style.width =
-        (mediumAc / totalAc * 100) + "%";
-
-    document.getElementById("hardBar").style.width =
-        (hardAc / totalAc * 100) + "%";
-
-    counters.forEach(c => counterIO.observe(c));
-  })
-  .catch(console.error);
 
 
 /* ---------- counters ---------- */
@@ -289,115 +232,6 @@ function buildHeatmap(id, calendar) {
     }
 }
 
-fetch("data/LeetcodeResponse.json")
-    .then(response => response.json())
-    .then(data => {
-
-        const calendar = JSON.parse(
-            data.data.matchedUser.submissionCalendar
-        );
-
-        buildHeatmap("heatmap", calendar);
-
-    })
-    .catch(console.error);
-
-
-/* -------- Badge ----------*/
-
-function renderLeetCodeBadges(userData) {
-  const badgeContainer = document.getElementById("leetcodeBadges");
-  const badgeCount = document.getElementById("badgeCount");
-
-  if (!badgeContainer) return;
-
-  const badges = userData?.data?.matchedUser?.badges || [];
-
-  // --------------------------------
-  // BADGE PRIORITY
-  // --------------------------------
-  function getBadgePriority(badge) {
-    const name = badge.displayName.toLowerCase();
-
-    // Streak / milestone badges
-    if (name.includes("days badge")) return 100;
-
-    // Major achievement
-    if (name.includes("guardian")) return 90;
-
-    // Other badges
-    return 10;
-  }
-
-  // --------------------------------
-  // SORT BADGES
-  // --------------------------------
-  const sortedBadges = [...badges].sort((a, b) => {
-
-    const priorityA = getBadgePriority(a);
-    const priorityB = getBadgePriority(b);
-
-    if (priorityA !== priorityB) {
-      return priorityB - priorityA;
-    }
-
-    return new Date(b.creationDate) - new Date(a.creationDate);
-  });
-
-  // --------------------------------
-  // TOP 4 ONLY
-  // --------------------------------
-  const latestBadges = sortedBadges.slice(0, 8);
-
-  // Total badge count
-  if (badgeCount) {
-    badgeCount.textContent = badges.length;
-  }
-
-  badgeContainer.innerHTML = "";
-
-  if (latestBadges.length === 0) {
-    badgeContainer.innerHTML = `
-      <span class="mono" style="
-        font-size:10px;
-        color:var(--text-dim);
-      ">
-        No badges yet
-      </span>
-    `;
-    return;
-  }
-
-  // --------------------------------
-  // DISPLAY BADGES
-  // --------------------------------
-  latestBadges.forEach((badge) => {
-
-    // Handle both full URLs and /static/... URLs
-    const iconUrl = badge.icon.startsWith("http")
-      ? badge.icon
-      : `https://leetcode.com${badge.icon}`;
-
-    const badgeElement = document.createElement("div");
-
-    badgeElement.className = "leetcode-badge";
-
-    badgeElement.innerHTML = `
-      <img
-        src="${iconUrl}"
-        alt="${badge.displayName}"
-        loading="lazy"
-      >
-
-      <span class="leetcode-badge-name">
-        ${badge.displayName}
-      </span>
-    `;
-
-    badgeContainer.appendChild(badgeElement);
-  });
-}
-
 /* --------- GitHub ---------*/
 
 function setRepo(repo, card) {
@@ -428,7 +262,7 @@ fetch("data/gitResponse.json")
 
         const repos = data.data.user.topRepositories.nodes;
 
-        const first = repos.find(repo => repo.name === "LeetCode-Sync");
+        const first = repos.find(repo => repo.name === "QR-File-Transfer-System");
         const second = repos.find(repo => repo.name === "QR-File-Transfer-System");
         const third = repos.find(repo => repo.name === "Multi-Threaded_Port_Scanner");
         const fourth = repos.find(repo => repo.name === "Python-Keystroke-Logger-Educational-Project-");
@@ -455,8 +289,6 @@ fetch("data/gitResponse.json")
 
     const languageBar = document.getElementById("language-bar");
     const languageLegend = document.getElementById("language-legend");
-
-    document.getElementById("achievement-contributions").textContent = Contributions;
 
 
     languageBar.innerHTML = "";
@@ -571,28 +403,20 @@ function buildGithubHeatmap(id, weeks) {
 /* ---------- project modal data ---------- */
 const projectDetails = {
   proj1:{
-    title:'LeetCode Sync',
+    title:'SecurityScanner',
     badge:'Automation',
-    desc:'A fully automated pipeline that keeps a GitHub repository in sync with accepted LeetCode submissions — no manual copy-pasting.',
-    features:['Sync accepted solutions automatically','Stores only the best submission per problem','Rollback mechanism for regressions','Status tracking across every run'],
-    tech:['Python','GraphQL','SQLite','GitHub Actions'],
-    link:'https://github.com/Charanreddy0007/LeetCode-Sync'
+    desc:'A tool for automating security testing and vulnerability assessment by integrating multiple scanners and providing a unified report.',
+    features:['Integration of multiple security scanners','Automated scanning and reporting','Configurable scan parameters','Support for various protocols and targets'],
+    tech:['Go','Nuclei','WP Scan'],
+    link:''
   },
   proj2:{
-    title:'Port Scanner',
-    badge:'Networking',
-    desc:'A from-scratch TCP port scanner using raw sockets, built to understand the three-way handshake and scanning strategies at a low level.',
-    features:['Raw TCP connect scanning','Configurable port ranges and timeouts','Threaded scanning for speed','Clear open/closed/filtered reporting'],
-    tech:['Python','Sockets'],
-    link:'https://github.com/Charanreddy0007/Multi-Threaded_Port_Scanner'
-  },
-  proj3:{
-    title:'Educational Keylogger',
-    badge:'Educational Use Only',
-    desc:'A proof-of-concept keylogger built strictly for learning how input-capture and Windows API hooks work, run only inside an isolated, controlled lab environment.',
-    features:['Windows API keyboard hook demonstration','Local, encrypted log output for testing','No network exfiltration — sandboxed by design','Built purely for coursework and research'],
-    tech:['Python','Windows API'],
-    link:'https://github.com/Charanreddy0007/Python-Keystroke-Logger-Educational-Project-'
+    title:'Passwordy',
+    badge:'Linux CLI',
+    desc:'A password manager for the Linux command line, built with Python and designed to be simple and secure.',
+    features:['Secure password storage','Command-line interface','Open-source and free to use','Multi-Account support'],
+    tech:['Python','Cryptography'],
+    link:'https://github.com/Saif-Aldeen04/Passwordy'
   }
 };
 const modalOverlay = document.getElementById('modalOverlay');
@@ -610,7 +434,7 @@ document.querySelectorAll('[data-modal]').forEach(card=>{
         ${d.features.map(f=>`<li>${f}</li>`).join('')}
       </ul>
       <div class="tech-row" style="padding:0 0 22px;">${d.tech.map(t=>`<span class="tech-chip">${t}</span>`).join('')}</div>
-      <a href="${d.link}" target="_blank" rel="noopener" class="btn btn-primary magnetic">View on GitHub →</a>
+      ${d.link ? `<a href="${d.link}" target="_blank" rel="noopener" class="btn btn-primary magnetic">View on GitHub →</a>` : `<button class="btn btn-primary magnetic" style="cursor:default;" disabled>Coming Soon...</button>`}
     `;
     modalOverlay.classList.add('active');
     document.getElementById('modalClose').addEventListener('click', ()=> modalOverlay.classList.remove('active'));
@@ -627,12 +451,11 @@ const commands = [
   {label:'Go to About', action:()=>scrollToId('about')},
   {label:'Go to Projects', action:()=>scrollToId('projects')},
   {label:'Go to Skills', action:()=>scrollToId('skills')},
-  {label:'Go to LeetCode Dashboard', action:()=>scrollToId('leetcode')},
-  {label:'Go to GitHub Activity', action:()=>scrollToId('github')},
+  {label:'Go to Securing Organizations', action:()=>scrollToId('Securing Organizations')},
   {label:'Go to Blog', action:()=>scrollToId('blog')},
   {label:'Go to Contact', action:()=>scrollToId('contact')},
   {label:'Toggle Theme', action:()=>themeToggle.click()},
-  {label:'Copy Email Address', action:()=>{navigator.clipboard.writeText('charan.reddy@example.com');}},
+  {label:'Copy Email Address', action:()=>{navigator.clipboard.writeText('seafeldeenwael@gmail.com');}},
 ];
 function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); closeCmdk(); }
 function renderCmdk(filter=''){
