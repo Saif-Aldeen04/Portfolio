@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Viewer</title>
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --panel: #111319;
+      --text: #edf2f7;
+      --muted: #aab4c4;
+      --border: rgba(255,255,255,0.12);
+      --accent: #3b82f6;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: radial-gradient(circle at top, #121a2a 0%, var(--bg) 48%);
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+      min-height: 100%;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px;
+    }
+    .viewer {
+      width: min(1100px, 100%);
+      background: rgba(17, 19, 25, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+      overflow: hidden;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .title {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.06);
+    }
+    .img-wrap {
+      padding: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+      background: rgba(255,255,255,0.02);
+    }
+    img {
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: white;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+    @media (max-width: 640px) {
+      body { padding: 16px; }
+      .topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .img-wrap { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="viewer">
+    <div class="topbar">
+      <div class="title" id="viewerTitle">Certificate</div>
+      <div class="actions">
+        <a class="btn" id="downloadBtn" href="#" download>Download</a>
+        <a class="btn" href="javascript:window.close()">Close</a>
+      </div>
+    </div>
+    <div class="img-wrap">
+      <img id="viewerImage" src="" alt="Certificate" />
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const image = params.get('img');
+    const title = params.get('title') || 'Certificate';
+    const downloadUrl = params.get('download') || image;
+
+    if (image) {
+      document.getElementById('viewerImage').src = image;
+      document.title = title;
+      document.getElementById('viewerTitle').textContent = title;
+      const downloadBtn = document.getElementById('downloadBtn');
+      downloadBtn.href = image;
+      if (downloadUrl) {
+        downloadBtn.setAttribute('download', decodeURIComponent(downloadUrl.split('/').pop() || 'certificate'));
+      }
+    }
+  </script>
+</body>
+</html>

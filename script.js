@@ -405,16 +405,16 @@ const projectDetails = {
   proj1:{
     title:'SecurityScanner',
     badge:'Automation',
-    desc:'A tool for automating security testing and vulnerability assessment by integrating multiple scanners and providing a unified report.',
-    features:['Integration of multiple security scanners','Automated scanning and reporting','Configurable scan parameters','Support for various protocols and targets'],
+    desc:'A workflow-driven security automation project designed to reduce manual effort during assessments by combining reconnaissance, scanning, and reporting into one repeatable process.',
+    features:['Multiple security tools integrated into one workflow','Faster vulnerability assessment with less manual overhead','Configurable scan settings for different targets','Structured output for easier evidence collection and reporting'],
     tech:['Go','Nuclei','WP Scan'],
     link:''
   },
   proj2:{
     title:'Passwordy',
     badge:'Linux CLI',
-    desc:'A password manager for the Linux command line, built with Python and designed to be simple and secure.',
-    features:['Secure password storage','Command-line interface','Open-source and free to use','Multi-Account support'],
+    desc:'A Linux-first password manager built to keep credentials secure, organized, and easy to access from the terminal without adding unnecessary complexity.',
+    features:['Encrypted local storage for sensitive credentials','Fast CLI workflow for day-to-day usage','Simple design for managing multiple accounts','Lightweight tool focused on security and usability'],
     tech:['Python','Cryptography'],
     link:'https://github.com/Saif-Aldeen04/Passwordy'
   }
@@ -449,18 +449,49 @@ const cmdkList = document.getElementById('cmdkList');
 const commands = [
   {label:'Go to Home', action:()=>scrollToId('home')},
   {label:'Go to About', action:()=>scrollToId('about')},
+  {label:'Go to Securing Organizations', action:()=>scrollToId('securing-organizations')},
+  {label:'Go to Experience', action:()=>scrollToId('experience')},
+  {label:'Go to Platforms', action:()=>scrollToId('platforms')},
   {label:'Go to Projects', action:()=>scrollToId('projects')},
   {label:'Go to Skills', action:()=>scrollToId('skills')},
-  {label:'Go to Securing Organizations', action:()=>scrollToId('Securing Organizations')},
   {label:'Go to Blog', action:()=>scrollToId('blog')},
+  {label:'Go to More About Me', action:()=>scrollToId('more-about')},
   {label:'Go to Contact', action:()=>scrollToId('contact')},
+  {label:'View CV', action:()=>window.open('assets/Saif Aldeen Wael CV.pdf', '_blank')},
   {label:'Toggle Theme', action:()=>themeToggle.click()},
-  {label:'Copy Email Address', action:()=>{navigator.clipboard.writeText('seafeldeenwael@gmail.com');}},
+  {label:'Open GitHub', action:()=>window.open('https://github.com/Saif-Aldeen04', '_blank')},
+  {label:'Copy Email Address', action:()=>copyToClipboard('seafeldeenwael@gmail.com')},
 ];
-function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); closeCmdk(); }
+
+function copyToClipboard(value){
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(value);
+    return;
+  }
+  const temp = document.createElement('textarea');
+  temp.value = value;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand('copy');
+  document.body.removeChild(temp);
+}
+
+function scrollToId(id){
+  const target = document.getElementById(id);
+  if (target) {
+    target.scrollIntoView({behavior:'smooth'});
+  }
+  closeCmdk();
+}
+
 function renderCmdk(filter=''){
   cmdkList.innerHTML='';
-  commands.filter(c=>c.label.toLowerCase().includes(filter.toLowerCase())).forEach((c,i)=>{
+  const filtered = commands.filter(c=>c.label.toLowerCase().includes(filter.toLowerCase()));
+  if (!filtered.length) {
+    cmdkList.innerHTML = '<div class="cmdk-item"><span>No matching command</span></div>';
+    return;
+  }
+  filtered.forEach((c,i)=>{
     const item = document.createElement('div');
     item.className='cmdk-item'+(i===0?' active':'');
     item.innerHTML = `<span>${c.label}</span><span class="k">↵</span>`;
@@ -468,20 +499,35 @@ function renderCmdk(filter=''){
     cmdkList.appendChild(item);
   });
 }
-function openCmdk(){ cmdkOverlay.classList.add('active'); cmdkInput.value=''; renderCmdk(); cmdkInput.focus(); }
-function closeCmdk(){ cmdkOverlay.classList.remove('active'); }
-document.getElementById('cmdkBtn').addEventListener('click', openCmdk);
+
+function openCmdk(){
+  if (!cmdkOverlay || !cmdkInput || !cmdkList) return;
+  cmdkOverlay.classList.add('active');
+  cmdkInput.value='';
+  renderCmdk();
+  cmdkInput.focus();
+}
+
+function closeCmdk(){
+  if (!cmdkOverlay) return;
+  cmdkOverlay.classList.remove('active');
+}
+
+document.getElementById('cmdkBtn')?.addEventListener('click', openCmdk);
 cmdkInput?.addEventListener('input', ()=> renderCmdk(cmdkInput.value));
-cmdkOverlay.addEventListener('click', (e)=>{ if(e.target===cmdkOverlay) closeCmdk(); });
+cmdkOverlay?.addEventListener('click', (e)=>{ if(e.target===cmdkOverlay) closeCmdk(); });
 document.addEventListener('keydown', (e)=>{
-  if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); cmdkOverlay.classList.contains('active') ? closeCmdk() : openCmdk(); }
-  if(e.key==='Escape'){ closeCmdk(); modalOverlay.classList.remove('active'); }
+  if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); cmdkOverlay && cmdkOverlay.classList.contains('active') ? closeCmdk() : openCmdk(); }
+  if(e.key==='Escape'){ closeCmdk(); modalOverlay && modalOverlay.classList.remove('active'); }
 });
 
 /* ---------- resume button fallback ---------- */
-document.getElementById('resumeBtn').addEventListener('click', (e)=>{
-  e.preventDefault();
-  alert('Add your resume PDF link here to enable this download.');
-});
+const resumeBtn = document.getElementById('resumeBtn');
+if (resumeBtn) {
+  resumeBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    alert('Add your resume PDF link here to enable this download.');
+  });
+}
 
 
