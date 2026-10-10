@@ -10,6 +10,44 @@ themeToggle.addEventListener('click', ()=>{
   themeToggle.textContent = document.documentElement.classList.contains('light') ? '◑' : '◐';
 });
 
+/* ---------- mobile navigation ---------- */
+const nav = document.querySelector('nav');
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const mobileDrawer = document.getElementById('mobileDrawer');
+const mobileDrawerClose = document.getElementById('mobileDrawerClose');
+const navBackdrop = document.getElementById('navBackdrop');
+
+function closeMobileNav(){
+  nav?.classList.remove('nav-open');
+  mobileDrawer?.classList.remove('open');
+  navBackdrop?.classList.remove('active');
+  document.body.style.overflow = '';
+  hamburger?.setAttribute('aria-expanded', 'false');
+}
+
+hamburger?.addEventListener('click', ()=>{
+  const isOpen = nav?.classList.toggle('nav-open');
+  mobileDrawer?.classList.toggle('open', Boolean(isOpen));
+  navBackdrop?.classList.toggle('active', Boolean(isOpen));
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  hamburger.setAttribute('aria-expanded', String(Boolean(isOpen)));
+});
+
+mobileDrawer?.querySelectorAll('a').forEach(link=>{
+  link.addEventListener('click', closeMobileNav);
+});
+
+mobileDrawerClose?.addEventListener('click', closeMobileNav);
+
+document.addEventListener('click', (e)=>{
+  if (!nav?.classList.contains('nav-open')) return;
+  if (nav.contains(e.target)) return;
+  closeMobileNav();
+});
+
+navBackdrop?.addEventListener('click', closeMobileNav);
+
 /* ---------- scroll progress + back to top + nav bg ---------- */
 const progress = document.getElementById('progress');
 const toTop = document.getElementById('toTop');
@@ -518,7 +556,7 @@ cmdkInput?.addEventListener('input', ()=> renderCmdk(cmdkInput.value));
 cmdkOverlay?.addEventListener('click', (e)=>{ if(e.target===cmdkOverlay) closeCmdk(); });
 document.addEventListener('keydown', (e)=>{
   if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); cmdkOverlay && cmdkOverlay.classList.contains('active') ? closeCmdk() : openCmdk(); }
-  if(e.key==='Escape'){ closeCmdk(); modalOverlay && modalOverlay.classList.remove('active'); }
+  if(e.key==='Escape'){ closeCmdk(); closeMobileNav(); modalOverlay && modalOverlay.classList.remove('active'); }
 });
 
 /* ---------- resume button fallback ---------- */

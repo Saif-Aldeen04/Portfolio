@@ -38,7 +38,7 @@
 <nav>
   <div class="nav-inner">
     <a href="#home" class="logo"><span class="dot"></span>SaifAldeenWael.blackess</a>
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#securing-organizations">Securing Organizations</a>
@@ -53,10 +53,29 @@
     <div class="nav-right">
       <div class="icon-btn" id="cmdkBtn" title="Command palette" aria-label="Open command palette">⌘</div>
       <div class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle light/dark theme">◐</div>
-      <div class="icon-btn hamburger" id="hamburger" aria-label="Menu">☰</div>
+      <button class="icon-btn hamburger" id="hamburger" type="button" aria-label="Menu" aria-controls="navLinks" aria-expanded="false">☰</button>
     </div>
   </div>
 </nav>
+<div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+<aside class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-title">Menu</span>
+    <button class="icon-btn mobile-drawer-close" id="mobileDrawerClose" type="button" aria-label="Close menu">✕</button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#securing-organizations">Securing Organizations</a>
+    <a href="#experience">Experience</a>
+    <a href="#platforms">Platforms</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#blog">Blog</a>
+    <a href="#more-about">More About Me</a>
+    <a href="#contact">Contact</a>
+  </div>
+</aside>
 
 <!-- HERO -->
 <section class="hero" id="home">
